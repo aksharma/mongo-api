@@ -12,7 +12,21 @@ describe 'Products API' do
                                  weight: 42}}
 
   end
+
+  describe 'GET /products' do
+    it 'Sends a list of products' do
+      post '/products', post_params
+      post_params[:product][:name] = 'Medium Package'
+      post '/products', post_params
+
+      get '/products'
+
+      expect(last_response.status).to eq 200
+      json = JSON.parse(last_response.body)
+      expect(json['products'].length).to eq(2)
     end
+  end
+
   describe 'POST /products' do
     it 'Creates a product' do
       post '/products', post_params
