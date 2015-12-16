@@ -9,3 +9,8 @@ git push origin master
 gem 'rspec-rails'
 bundle install
 rails g rspec:install
+
+gem 'mongo_mapper'
+gem 'bson_ext'
+bundle exec rails generate mongo_mapper:config
+
