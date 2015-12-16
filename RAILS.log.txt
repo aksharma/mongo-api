@@ -12,5 +12,12 @@ rails g rspec:install
 
 gem 'mongo_mapper'
 gem 'bson_ext'
+bundle install
 bundle exec rails generate mongo_mapper:config
 
+in config/application.rb:
+config.generators do |g|
+  g.orm :mongo_mapper
+end
+
+bundle exec rspec spec/requests/products_spec.rb
