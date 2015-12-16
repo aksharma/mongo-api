@@ -2,12 +2,14 @@ source 'https://rubygems.org'
 
 gem 'mongo_mapper'
 gem 'bson_ext'
+gem 'rails-api'
+gem 'pry', group: [:development, :test]
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.0.0'
 
 group :test do
-    gem 'rspec-rails', require: false
+  gem 'rspec-rails', require: false
 end
 
 # Use SCSS for stylesheets
