@@ -142,4 +142,18 @@ describe 'Products API' do
     end
 
   end
+
+  #destroy
+  describe 'DELETE /products/:id' do
+    it 'Sends a successful JSON response' do
+      post '/products', post_params
+      json = JSON.parse(last_response.body)
+
+      id = json['product']['id']
+      delete "/products/#{id}"
+
+      expect(last_response.status).to eq 200
+    end
+  end
+
 end

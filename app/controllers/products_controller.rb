@@ -15,4 +15,19 @@ class ProductsController < ApplicationController
       render json: {errors: product.errors}, status: :unprocessable_entity
     end
   end
+
+  # DELETE /products/1.json
+  def destroy
+    @product.destroy
+    render json: {head: :no_content}
+  end
+
+  private
+    def set_product
+      @product = Product.find(params[:id])
+    end
+
+    def product_params
+      params.require(:product).permit(:name, :type, :length, :width, :height, :weight)
+    end
 end
