@@ -1,0 +1,7 @@
+rails new ship --skip-active-record -T
+cd ship
+git init
+git add .
+git commit -m 'initial commit'
+git remote add origin git@github.com:aksharma/mongo-api.git
+git push origin master
