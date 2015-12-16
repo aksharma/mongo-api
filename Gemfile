@@ -3,6 +3,9 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.0.0'
 
+group :test do
+    gem 'rspec-rails', require: false
+end
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
