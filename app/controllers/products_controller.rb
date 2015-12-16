@@ -1,4 +1,7 @@
 class ProductsController < ApplicationController
+
+  before_action :set_product, only: [:show, :update, :destroy]
+
   # GET /products.json
   def index
     @products = Product.all
@@ -7,12 +10,11 @@ class ProductsController < ApplicationController
 
   # POST /products.json
   def create
-    product = Product.create(params[:product])
-    if product.valid?
-      render json: {product: product}, status: :created
+    @product = Product.create(product_params)
+    if @product.valid?
+      render json: {product: @product}, status: :created
     else
-     #binding.pry
-      render json: {errors: product.errors}, status: :unprocessable_entity
+      render json: {errors: @product.errors}, status: :unprocessable_entity
     end
   end
 
