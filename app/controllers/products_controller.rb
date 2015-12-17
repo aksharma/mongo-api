@@ -18,6 +18,15 @@ class ProductsController < ApplicationController
     end
   end
 
+  # PATCH/PUT /products/1.json
+  def update
+    if @product.update_attributes(params[:product])
+      render json: {head: :no_content}, status: :ok
+    else
+      render json: {errors: @product.errors}, status: :unprocessable_entity
+    end
+  end
+
   # DELETE /products/1.json
   def destroy
     @product.destroy

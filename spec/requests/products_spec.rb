@@ -163,6 +163,36 @@ describe 'Products API' do
 
   end
 
+  describe 'PUT/PATCH /products/:id' do
+    it "Updates a product" do
+      post '/products', small_pkg_params
+      json = JSON.parse(last_response.body)
+      id = json['product']['id']
+      orig_length = json['product']['length']
+      new_height = 99
+
+      put "/products/#{id}", {product: {height: new_height}}
+      expect(last_response.status).to eq 200
+
+      get '/products'
+      json = JSON.parse(last_response.body)
+      expect(json['products'][0]['height']).to eq(new_height)
+      expect(json['products'][0]['length']).to eq(orig_length)
+    end
+
+    it "Returns an error when validation fails" do
+      post '/products', small_pkg_params
+      json = JSON.parse(last_response.body)
+      id = json['product']['id']
+      orig_length = json['product']['length']
+      new_height = 99.5
+
+      put "/products/#{id}", {product: {height: new_height}}
+      json = JSON.parse(last_response.body)
+      expect(json['errors']).to eq({'height' => ["must be an integer"]})
+    end
+  end
+
   describe 'DELETE /products/:id' do
     it 'Sends a successful JSON response' do
       post '/products', small_pkg_params
