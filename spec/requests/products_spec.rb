@@ -33,6 +33,26 @@ describe 'Products API' do
 
   end
 
+  describe 'GET /products/:id' do
+    it 'Sends a product' do
+      post '/products', small_pkg_params
+      json = JSON.parse(last_response.body)
+      id = json['product']['id']
+
+      post '/products', large_pkg_params
+      post '/products', extra_large_pkg_params
+
+      get "/products/#{id}"
+      expect(last_response.status).to eq 200
+      expect(json['product']['name']).to eq('Small Package')
+    end
+
+    it "Returns an error when product not found" do
+      get '/products/1'
+      expect(last_response.status).to eq 500
+    end
+  end
+
   describe 'GET /products' do
     it 'Sends a list of products' do
       post '/products', small_pkg_params

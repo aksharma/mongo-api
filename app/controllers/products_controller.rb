@@ -2,6 +2,15 @@ class ProductsController < ApplicationController
 
   before_action :set_product, only: [:show, :update, :destroy]
 
+  # GET /products/1.json
+  def show
+    if @product
+      render json: {product: @product}, status: :ok
+    else
+      render json: {head: :no_content}, status: :notfound
+    end
+  end
+
   # GET /products.json
   def index
     @products = Product.all
