@@ -3,7 +3,7 @@ describe 'Products API' do
     Product.delete_all
   end
 
-  let :post_params do
+  let :small_pkg_params do
                       {product: {name: "Small Package",
                                  type: "Golf",
                                  length: 48,
@@ -13,23 +13,43 @@ describe 'Products API' do
 
   end
 
+  let :large_pkg_params do
+                      {product: {name: "Large Package",
+                                 type: "Golf",
+                                 length: 52,
+                                 width: 16,
+                                 height: 14,
+                                 weight: 56}}
+
+  end
+
+  let :extra_large_pkg_params do
+                      {product: {name: "Extra Large Package",
+                                 type: "Golf",
+                                 length: 56,
+                                 width: 18,
+                                 height: 16,
+                                 weight: 70}}
+
+  end
+
   describe 'GET /products' do
     it 'Sends a list of products' do
-      post '/products', post_params
-      post_params[:product][:name] = 'Medium Package'
-      post '/products', post_params
+      post '/products', small_pkg_params
+      post '/products', large_pkg_params
+      post '/products', extra_large_pkg_params
 
       get '/products'
 
       expect(last_response.status).to eq 200
       json = JSON.parse(last_response.body)
-      expect(json['products'].length).to eq(2)
+      expect(json['products'].length).to eq(3)
     end
   end
 
   describe 'POST /products' do
     it 'Creates a product' do
-      post '/products', post_params
+      post '/products', small_pkg_params
 
       expect(last_response.status).to eq 201
       json = JSON.parse(last_response.body)
@@ -43,8 +63,8 @@ describe 'Products API' do
     end
 
     it 'Returns an error message when a name is not provided' do
-      post_params[:product].delete :name
-      post '/products', post_params
+      small_pkg_params[:product].delete :name
+      post '/products', small_pkg_params
 
       expect(last_response.status).to eq 422
       json = JSON.parse(last_response.body)
@@ -52,8 +72,8 @@ describe 'Products API' do
     end
 
     it 'Returns an error message when a type is not provided' do
-      post_params[:product].delete :type
-      post '/products', post_params
+      small_pkg_params[:product].delete :type
+      post '/products', small_pkg_params
 
       expect(last_response.status).to eq 422
       json = JSON.parse(last_response.body)
@@ -61,8 +81,8 @@ describe 'Products API' do
     end
 
     it 'Returns an error message when a name is already taken' do
-      post '/products', post_params
-      post '/products', post_params
+      post '/products', small_pkg_params
+      post '/products', small_pkg_params
 
       expect(last_response.status).to eq 422
       json = JSON.parse(last_response.body)
@@ -70,8 +90,8 @@ describe 'Products API' do
     end
 
     it 'Returns an error message when a length is not a number' do
-      post_params[:product][:length] = 'x'
-      post '/products', post_params
+      small_pkg_params[:product][:length] = 'x'
+      post '/products', small_pkg_params
 
       expect(last_response.status).to eq 422
       json = JSON.parse(last_response.body)
@@ -79,8 +99,8 @@ describe 'Products API' do
     end
 
     it 'Returns an error message when a length is not an integer' do
-      post_params[:product][:length] = 47.5
-      post '/products', post_params
+      small_pkg_params[:product][:length] = 47.5
+      post '/products', small_pkg_params
 
       expect(last_response.status).to eq 422
       json = JSON.parse(last_response.body)
@@ -88,8 +108,8 @@ describe 'Products API' do
     end
 
     it 'Returns an error message when a width is not a number' do
-      post_params[:product][:width] = 'x'
-      post '/products', post_params
+      small_pkg_params[:product][:width] = 'x'
+      post '/products', small_pkg_params
 
       expect(last_response.status).to eq 422
       json = JSON.parse(last_response.body)
@@ -97,8 +117,8 @@ describe 'Products API' do
     end
 
     it 'Returns an error message when a width is not an integer' do
-      post_params[:product][:width] = 47.5
-      post '/products', post_params
+      small_pkg_params[:product][:width] = 47.5
+      post '/products', small_pkg_params
 
       expect(last_response.status).to eq 422
       json = JSON.parse(last_response.body)
@@ -106,8 +126,8 @@ describe 'Products API' do
     end
 
     it 'Returns an error message when a height is not a number' do
-      post_params[:product][:height] = 'x'
-      post '/products', post_params
+      small_pkg_params[:product][:height] = 'x'
+      post '/products', small_pkg_params
 
       expect(last_response.status).to eq 422
       json = JSON.parse(last_response.body)
@@ -115,8 +135,8 @@ describe 'Products API' do
     end
 
     it 'Returns an error message when a height is not an integer' do
-      post_params[:product][:height] = 47.5
-      post '/products', post_params
+      small_pkg_params[:product][:height] = 47.5
+      post '/products', small_pkg_params
 
       expect(last_response.status).to eq 422
       json = JSON.parse(last_response.body)
@@ -124,8 +144,8 @@ describe 'Products API' do
     end
 
     it 'Returns an error message when a weight is not a number' do
-      post_params[:product][:weight] = 'x'
-      post '/products', post_params
+      small_pkg_params[:product][:weight] = 'x'
+      post '/products', small_pkg_params
 
       expect(last_response.status).to eq 422
       json = JSON.parse(last_response.body)
@@ -133,8 +153,8 @@ describe 'Products API' do
     end
 
     it 'Returns an error message when a weight is not an integer' do
-      post_params[:product][:weight] = 47.5
-      post '/products', post_params
+      small_pkg_params[:product][:weight] = 47.5
+      post '/products', small_pkg_params
 
       expect(last_response.status).to eq 422
       json = JSON.parse(last_response.body)
@@ -143,16 +163,21 @@ describe 'Products API' do
 
   end
 
-  #destroy
   describe 'DELETE /products/:id' do
     it 'Sends a successful JSON response' do
-      post '/products', post_params
+      post '/products', small_pkg_params
+      post '/products', large_pkg_params
+      post '/products', extra_large_pkg_params
       json = JSON.parse(last_response.body)
 
       id = json['product']['id']
       delete "/products/#{id}"
 
       expect(last_response.status).to eq 200
+
+      get '/products'
+      json = JSON.parse(last_response.body)
+      expect(json['products'].length).to eq(2)
     end
   end
 
