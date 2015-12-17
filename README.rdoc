@@ -1,28 +1,45 @@
-== README
+API USAGE DOCUMENT
+___________________________________________________________________
+Content Type :
+   application/json
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+   sample json body
+    {product: {name: "Small Package",
+               type: "Golf",
+               length: 48,
+               width: 14,
+               height: 12,
+               weight: 42}}
 
-Things you may want to cover:
+API Requests:
 
-* Ruby version
+=> listing Products
+   url: http://localhost:3000/products
+   method: GET
+   body : not needed
 
-* System dependencies
+=> retrieving Product detail
+  url: http://localhost:3000/products/:id
+  method: GET
+  body : not needed
 
-* Configuration
+=> creating products
+   url: http://localhost:3000/products
+   method: POST
+   body : json
 
-* Database creation
+=> updating Product
+  url: http://localhost:3000/products/:id
+  method: PUT
+  body : json
 
-* Database initialization
+=> deleting Product
+  url: http://localhost:3000/products/:id
+  method: DELETE
+  body : not needed
 
-* How to run the test suite
+=> search products
+   url: http://localhost:3000/products/search
+   method: GET
+   body : json
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.

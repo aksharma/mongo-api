@@ -33,6 +33,104 @@ describe 'Products API' do
 
   end
 
+  let :select_type do
+                      {product: {:type => "Golf"}}
+  end
+
+  let :select_name do
+                      {product: {:name => "Small Package"}}
+  end
+
+  let :select_length do
+                      {product: {:length => 48}}
+  end
+
+  let :select_type_length do
+                      {product: {:type => "Golf", :length => 48}}
+  end
+
+  let :select_bigger_than_small do
+                      {product: {:type => "Golf",
+                                 :length => 49,
+                                 :width => 15,
+                                 :height => 13,
+                                 :weight => 43}}
+
+  end
+
+  describe 'GET /products/search' do
+    it 'Sends an appropriate product for name' do
+      post '/products', small_pkg_params
+      post '/products', large_pkg_params
+      post '/products', extra_large_pkg_params
+
+      get '/products/search', select_name
+      expect(last_response.status).to eq 200
+      json = JSON.parse(last_response.body)
+      expect(json['product']['name']).to eq('Small Package')
+    end
+
+    it 'Sends an appropriate product for type' do
+      post '/products', small_pkg_params
+      post '/products', large_pkg_params
+      post '/products', extra_large_pkg_params
+
+      get '/products/search', select_type
+      expect(last_response.status).to eq 200
+      json = JSON.parse(last_response.body)
+      expect(json['product']['name']).to eq('Small Package')
+    end
+
+    it 'Sends an appropriate product for length' do
+      post '/products', small_pkg_params
+      post '/products', large_pkg_params
+      post '/products', extra_large_pkg_params
+
+      get '/products/search', select_length
+      expect(last_response.status).to eq 200
+      json = JSON.parse(last_response.body)
+      expect(json['product']['name']).to eq('Small Package')
+    end
+
+    it 'Sends an appropriate product for type and length' do
+      post '/products', small_pkg_params
+      post '/products', large_pkg_params
+      post '/products', extra_large_pkg_params
+
+      get '/products/search', select_type_length
+      expect(last_response.status).to eq 200
+      json = JSON.parse(last_response.body)
+      expect(json['product']['name']).to eq('Small Package')
+    end
+
+    it 'Sends an appropriate product bigger than small' do
+      post '/products', small_pkg_params
+      post '/products', large_pkg_params
+      post '/products', extra_large_pkg_params
+
+      get '/products/search', select_bigger_than_small
+      expect(last_response.status).to eq 200
+      json = JSON.parse(last_response.body)
+      expect(json['product']['name']).to eq('Large Package')
+    end
+
+    it 'Returns an error when the searched for bigger than the largest product' do
+      post '/products', small_pkg_params
+      post '/products', large_pkg_params
+      post '/products', extra_large_pkg_params
+
+      get '/products/search', {product: {:length => 400}}
+      expect(last_response.status).to eq 500
+    end
+
+    it "Returns an error when product not found" do
+      post '/products', small_pkg_params
+
+      get '/products/search', {product: {:type => "Pets"}}
+      expect(last_response.status).to eq 500
+    end
+  end
+
   describe 'GET /products/:id' do
     it 'Sends a product' do
       post '/products', small_pkg_params

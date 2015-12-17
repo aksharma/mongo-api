@@ -2,6 +2,15 @@ class ProductsController < ApplicationController
 
   before_action :set_product, only: [:show, :update, :destroy]
 
+  # GET /products/search.json
+  def search
+    if @product = Product.search(params).first
+      render json: {product: @product}, status: :ok
+    else
+      render json: {head: :no_content}, status: :notfound
+    end
+  end
+
   # GET /products/1.json
   def show
     if @product

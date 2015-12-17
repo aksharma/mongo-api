@@ -1,4 +1,5 @@
 Ship::Application.routes.draw do
+  get 'products/search', to: 'products#search'
   resources :products
 
   # The priority is based upon order of creation: first created -> highest priority.
